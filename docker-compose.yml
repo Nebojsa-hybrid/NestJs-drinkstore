@@ -6,7 +6,7 @@ services:
     image: postgres:13
     restart: always
     ports:
-      - 5440:5441
+      - 5433:5432
     env_file: .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}

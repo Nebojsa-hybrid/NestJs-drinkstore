@@ -45,6 +45,38 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
+## Docker
+
+Setting up the local database
+
+```sh
+$ docker compose -f docker-compose.yml up -d
+```
+
+Running the migration
+
+```sh
+$ pnpm dlx prisma migrate dev
+```
+
+If you enounter proxy network error
+
+```sh
+docker network create proxy
+```
+
+Running the seed
+
+```sh
+$ pnpm dlx prisma db seed
+```
+
+Drop DB and run the seed
+
+```sh
+$ pnpm dlx prisma migrate reset --force
+```
+
 ## Test
 
 ```bash
