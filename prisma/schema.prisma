@@ -12,10 +12,11 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  name     String?
+  id       String @id @default(cuid())
+  name     String
   lastName String
   email    String
+  password String
 
   createdBy String
   updatedBy String?

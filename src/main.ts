@@ -18,13 +18,6 @@ async function bootstrap() {
   const parsedApplicationPort = `:${configService.get('application.port')}`;
   const applicationUrl = `${applicationProtocol}://${applicationHost}${parsedApplicationPort}/${globalPrefix}`;
 
-  console.log(
-    'console.log: ',
-    applicationPort,
-    applicationProtocol,
-    applicationPort,
-  );
-
   const config = new DocumentBuilder()
     .setTitle('Drinkstore API')
     .setDescription('Complete collection of Drinkstore API endpoints')

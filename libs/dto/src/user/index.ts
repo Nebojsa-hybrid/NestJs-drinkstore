@@ -1,8 +1,15 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  PartialType,
+  PickType,
+} from '@nestjs/swagger';
 import { User as PrismaUser } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsEmail,
+  IsInt,
   IsISO8601,
   IsOptional,
   IsString,
@@ -24,6 +31,10 @@ export class User implements PrismaUser {
   @ApiProperty({ type: String, description: 'User last name' })
   @IsString()
   lastName: string;
+
+  @ApiProperty({ type: String, description: 'User password' })
+  @IsString()
+  password: string;
 
   @ApiProperty({ type: String, description: 'Created by' })
   @IsOptional()
@@ -61,3 +72,41 @@ export class User implements PrismaUser {
   @IsBoolean()
   deleted: boolean;
 }
+
+export class CreateUserRequest extends PickType(User, [
+  'email',
+  'name',
+  'lastName',
+  'password',
+] as const) {
+  @ApiProperty({
+    type: String,
+    description: 'User password',
+  })
+  @IsString()
+  password: string;
+}
+
+export class CreateUserResponse extends PickType(User, ['id'] as const) {}
+
+export class GetUsersQuery extends PartialType(User) {
+  @ApiPropertyOptional({ type: Number, description: 'Current data limit.' })
+  @IsInt()
+  @IsOptional()
+  limit?: number;
+
+  @ApiPropertyOptional({ type: Number, description: 'Current data offset.' })
+  @IsInt()
+  @IsOptional()
+  offset?: number;
+
+  @ApiPropertyOptional({ type: Boolean, description: 'Include deleted.' })
+  @IsBoolean()
+  @IsOptional()
+  @Transform(({ value }) => value === 'true')
+  deleted?: boolean;
+}
+
+export class UpdateUserRequest extends PartialType(
+  PickType(User, ['email', 'name', 'lastName'] as const),
+) {}
