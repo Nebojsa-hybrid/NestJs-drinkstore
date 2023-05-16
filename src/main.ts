@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -18,25 +18,14 @@ async function bootstrap() {
   const parsedApplicationPort = `:${configService.get('application.port')}`;
   const applicationUrl = `${applicationProtocol}://${applicationHost}${parsedApplicationPort}/${globalPrefix}`;
 
+  app.setGlobalPrefix(globalPrefix);
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
   const config = new DocumentBuilder()
     .setTitle('Drinkstore API')
     .setDescription('Complete collection of Drinkstore API endpoints')
     .setVersion('1.0.0')
-    // .addOAuth2({
-    //   type: 'oauth2', // TODO :: this should be changed
-    //   flows: {
-    //     implicit: {
-    //       authorizationUrl: ``, // TODO :: add url
-    //       scopes: {
-    //         openid: 'openid',
-    //         profile: 'profile',
-    //         email: 'email',
-    //       },
-    //     },
-    //   },
-    // })
     .addTag('users')
-    // .addTag('')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
