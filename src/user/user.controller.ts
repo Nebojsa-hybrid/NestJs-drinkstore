@@ -8,11 +8,12 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiCreatedResponse,
   ApiNoContentResponse,
-  ApiOAuth2,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -23,23 +24,6 @@ import {
   User,
 } from 'libs/dto/src';
 import { UserService } from './user.service';
-
-// import {
-//   CheckMailRequest,
-//   CheckMailResponse,
-//   CreateUserRequest,
-//   CreateUserResponse,
-//   UpdateUserRequest,
-//   User,
-// } from '@eventmender/dto';
-
-// import { UserService } from './user.service';
-// import { Jwt } from '../auth/decorators/jwt.decorator';
-// import { JwtPayload } from '../auth/jwt.interface';
-// import { AuthGuard } from '@nestjs/passport';
-// import { ApiFile } from '../upload-media/api-file.decorator';
-// import { fileMimetypeFilter } from '../upload-media/file-type.decorator';
-// import { ParseFile } from '../upload-media/parse-file.pipe';
 
 @ApiTags('User')
 @Controller('user')
@@ -59,9 +43,8 @@ export class UserController {
     description: 'Returns the rall users',
     type: User,
   })
-  // @ApiOAuth2([])
   @Get()
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   getCurrentUser() {
     return this.userService.getUsers();
   }

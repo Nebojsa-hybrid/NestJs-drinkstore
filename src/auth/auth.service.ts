@@ -1,11 +1,10 @@
-// auth.service.ts
-
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
   constructor(
     private readonly jwtService: JwtService,
     private readonly prismaService: PrismaService,
@@ -23,9 +22,25 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { userId: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    try {
+      const payload = { username: user.name, password: user.password };
+      return {
+        access_token: this.jwtService.sign(payload),
+      };
+    } catch (e) {
+      this.logger.error(e);
+
+      throw e;
+    }
+  }
+
+  async register(body: any) {
+    try {
+      return body;
+    } catch (e) {
+      this.logger.error(e);
+
+      throw e;
+    }
   }
 }
