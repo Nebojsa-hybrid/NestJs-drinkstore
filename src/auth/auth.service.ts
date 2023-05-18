@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserRequest, LoginRequest } from 'libs/dto/src';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -15,15 +16,47 @@ export class AuthService {
     // For example, you can query the database to find the user by ID
     // and return the user object if found, or null if not found
     // Replace this with your actual implementation
-    const user = await this.prismaService.user.findFirstOrThrow({
-      where: { id: userId },
-    });
-    return user;
+    try {
+      const user = await this.prismaService.user.findFirstOrThrow({
+        where: { id: userId },
+      });
+      return user;
+    } catch (e) {
+      this.logger.error(e);
+
+      throw e;
+    }
   }
 
-  async login(user: any) {
+  async userExist(email: string, password: string) {
     try {
-      const payload = { username: user.name, password: user.password };
+      const existingUser = await this.prismaService.user.findFirst({
+        where: { email: email },
+      });
+
+      if (!existingUser) {
+        throw new Error('No user');
+      }
+
+      if (existingUser.password !== password) {
+        throw new Error('Invalid password');
+      }
+      return;
+    } catch (e) {
+      this.logger.error(e);
+
+      throw e;
+    }
+  }
+
+  async login(user: LoginRequest) {
+    try {
+      const { email, password } = user;
+
+      await this.userExist(email, password);
+
+      const payload = { username: email, password: password };
+
       return {
         access_token: this.jwtService.sign(payload),
       };
@@ -34,9 +67,13 @@ export class AuthService {
     }
   }
 
-  async register(body: any) {
+  async register(body: CreateUserRequest) {
     try {
-      return body;
+      const newUser = await this.prismaService.user.create({
+        data: { ...body },
+      });
+
+      return newUser;
     } catch (e) {
       this.logger.error(e);
 

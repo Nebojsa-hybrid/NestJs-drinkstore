@@ -44,7 +44,7 @@ export class UserController {
     type: User,
   })
   @Get()
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   getCurrentUser() {
     return this.userService.getUsers();
   }
@@ -54,7 +54,8 @@ export class UserController {
     type: User,
   })
   @Get(':id')
-  getUserById(@Param() id: string) {
+  @UseGuards(AuthGuard('jwt'))
+  getUserById(@Param('id') id: string) {
     return this.userService.getUserById(id);
   }
 

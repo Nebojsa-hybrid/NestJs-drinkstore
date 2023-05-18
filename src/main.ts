@@ -25,6 +25,7 @@ async function bootstrap() {
     .setTitle('Drinkstore API')
     .setDescription('Complete collection of Drinkstore API endpoints')
     .setVersion('1.0.0')
+    .addBearerAuth()
     // .addTag('auth')
     // .addTag('user')
     .build();

@@ -110,3 +110,7 @@ export class GetUsersQuery extends PartialType(User) {
 export class UpdateUserRequest extends PartialType(
   PickType(User, ['email', 'name', 'lastName'] as const),
 ) {}
+
+export class LoginRequest extends PartialType(
+  PickType(User, ['email', 'password'] as const),
+) {}
