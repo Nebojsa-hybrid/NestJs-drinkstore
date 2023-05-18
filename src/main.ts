@@ -26,15 +26,15 @@ async function bootstrap() {
     .setDescription('Complete collection of Drinkstore API endpoints')
     .setVersion('1.0.0')
     .addBearerAuth()
-    // .addTag('auth')
-    // .addTag('user')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('docs', app, document, {
     useGlobalPrefix: true,
-    swaggerOptions: {},
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
   });
 
   await app.listen(applicationPort, () => {

@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { JwtPayload } from 'src/auth/jwt-payload.interface';
 // import { AccountType } from '@prisma/client';
 
 // import { hasRole } from '../auth/auth.utils';
@@ -77,14 +78,18 @@ export class UserService {
     }
   }
 
-  async updateUser(id: string, body: UpdateUserRequest): Promise<User> {
+  async updateUser(
+    id: string,
+    body: UpdateUserRequest,
+    jwt: JwtPayload,
+  ): Promise<User> {
     try {
       const { email, name, lastName } = body;
       const user = await this.prismaService.user.update({
         where: {
           id,
         },
-        data: { ...body, updatedBy: '' },
+        data: { ...body, updatedBy: jwt.userId },
       });
 
       return user;

@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
@@ -23,6 +24,8 @@ import {
   UpdateUserRequest,
   User,
 } from 'libs/dto/src';
+import { Jwt } from 'src/auth/decorators/jwt.decorator';
+import { JwtPayload } from 'src/auth/jwt-payload.interface';
 import { UserService } from './user.service';
 
 @ApiTags('User')
@@ -35,6 +38,8 @@ export class UserController {
     type: CreateUserResponse,
   })
   @Post()
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   createUser(@Body() body: CreateUserRequest) {
     return this.userService.createUser(body);
   }
@@ -44,7 +49,8 @@ export class UserController {
     type: User,
   })
   @Get()
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   getCurrentUser() {
     return this.userService.getUsers();
   }
@@ -55,6 +61,7 @@ export class UserController {
   })
   @Get(':id')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   getUserById(@Param('id') id: string) {
     return this.userService.getUserById(id);
   }
@@ -62,25 +69,25 @@ export class UserController {
   @ApiNoContentResponse({
     description: 'Updates the record.',
   })
-  // @ApiOAuth2([])
   @Patch(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   updateUser(
     @Param('id') id: string,
     @Body() body: UpdateUserRequest,
-    // @Jwt() jwt: JwtPayload,
+    @Jwt() jwt: JwtPayload,
   ) {
-    return this.userService.updateUser(id, body);
+    return this.userService.updateUser(id, body, jwt);
   }
 
   @ApiNoContentResponse({
     description: 'The record has been successfully deleted.',
   })
-  // @ApiOAuth2([])
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Delete()
   deleteUser(@Param('id') id: string) {
     return this.userService.deleteUser(id);
