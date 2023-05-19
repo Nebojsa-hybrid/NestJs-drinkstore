@@ -1,3 +1,5 @@
+import { User } from 'libs/dto/src';
+
 export interface JwtPayload {
   /** Issuer (who created and signed this token) */
   iss?: string;
@@ -16,4 +18,5 @@ export interface JwtPayload {
   /** Token permissions (what the token has permissions to do) */
   permissions?: Array<string>;
   userId: string;
+  user: User;
 }

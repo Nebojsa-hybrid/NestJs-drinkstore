@@ -41,7 +41,7 @@ export class AuthService {
       if (existingUser.password !== password) {
         throw new Error('Invalid password');
       }
-      return;
+      return existingUser.id;
     } catch (e) {
       this.logger.error(e);
 
@@ -53,9 +53,9 @@ export class AuthService {
     try {
       const { email, password } = user;
 
-      await this.userExist(email, password);
+      const id = await this.userExist(email, password);
 
-      const payload = { username: email, password: password };
+      const payload = { username: email, password: password, userId: id };
 
       return {
         access_token: this.jwtService.sign(payload),
