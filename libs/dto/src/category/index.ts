@@ -102,5 +102,5 @@ export class GetCategoryQuery extends PartialType(Category) {
 }
 
 export class UpdateCategoryRequest extends PartialType(
-  PickType(Category, ['name'] as const),
+  PickType(Category, ['name', 'description'] as const),
 ) {}

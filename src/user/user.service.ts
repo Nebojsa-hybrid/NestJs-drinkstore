@@ -4,33 +4,15 @@ import {
   UpdateUserRequest,
   User,
 } from 'libs/dto/src';
-import {
-  BadRequestException,
-  ForbiddenException,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
-import { ConfigType } from '@nestjs/config';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtPayload } from 'src/auth/jwt-payload.interface';
-// import { AccountType } from '@prisma/client';
-
-// import { hasRole } from '../auth/auth.utils';
-// import { AuthService } from '../auth/auth.service';
-// import { PrismaService } from '../prisma/prisma.service';
-
-// import awsConfigProvider from '../config/aws.config';
-
-// import type { JwtPayload } from '../auth/jwt.interface';
 
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
 
-  constructor(
-    private readonly prismaService: PrismaService, // private readonly authService: AuthService, // @Inject(awsConfigProvider.KEY) // private readonly awsConfig: ConfigType<typeof awsConfigProvider>,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async createUser(body: CreateUserRequest): Promise<CreateUserResponse> {
     try {

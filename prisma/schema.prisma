@@ -40,7 +40,7 @@ model Category {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
   deleted   Boolean   @default(false)
-  Drink     Drink[]
+  drink     Drink[]
 
   @@map(name: "category")
 }
