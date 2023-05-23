@@ -79,6 +79,7 @@ export class CreateDrinkRequest extends PickType(Drink, [
   'name',
   'price',
   'description',
+  'categoryId',
 ] as const) {}
 
 export class CreateDrinkResponse extends PickType(Drink, ['id' as const]) {}
@@ -104,5 +105,5 @@ export class GetDrinkQuery extends PartialType(Drink) {
 }
 
 export class UpdateDrinkRequest extends PartialType(
-  PickType(Drink, ['name'] as const),
+  PickType(Drink, ['name', 'description', 'price', 'available'] as const),
 ) {}
