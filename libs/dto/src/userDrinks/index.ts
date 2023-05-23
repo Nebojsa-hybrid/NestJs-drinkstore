@@ -58,18 +58,18 @@ export class UserDrinks implements PrismaUserDrinks {
   deleted: boolean;
 }
 
-export class CreateVendorFeaturesRequest extends PickType(UserDrinks, [
+export class CreateUserDrinksRequest extends PickType(UserDrinks, [
   'userId',
 ] as const) {
   @ApiProperty({ type: String, isArray: true, description: 'Drink ID.' })
   drinkIds: string[];
 }
 
-export class CreateVendorFeaturesResponse extends PickType(UserDrinks, [
+export class CreateuserDrinksResponse extends PickType(UserDrinks, [
   'id',
 ] as const) {}
 
-export class GetVendorFeaturesQuery {
+export class GetUserDrinksQuery {
   @ApiPropertyOptional({ type: Number, description: 'Current data limit.' })
   @IsInt()
   @IsOptional()
@@ -89,7 +89,7 @@ export class GetVendorFeaturesQuery {
   deleted?: boolean;
 }
 
-export class UpdateVendorFeaturesRequest extends PartialType(
+export class UpdateuserDrinksRequest extends PartialType(
   PickType(UserDrinks, ['userId'] as const),
 ) {
   @ApiProperty({ type: String, isArray: true, description: 'Drink ID.' })

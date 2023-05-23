@@ -7,6 +7,7 @@ import { CategoryModule } from './category/category.module';
 import applicationConfig from './config/application.config';
 import { DrinkModule } from './drink/drink.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { UserDrinksModule } from './user-drinks/user-drinks.module';
 import { UserModule } from './user/user.module';
 import { JwtMiddleware } from './utils/jwtMiddleware';
 
@@ -19,6 +20,7 @@ import { JwtMiddleware } from './utils/jwtMiddleware';
     AuthModule,
     CategoryModule,
     DrinkModule,
+    UserDrinksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
