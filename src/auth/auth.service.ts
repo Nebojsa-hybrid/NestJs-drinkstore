@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserRequest, LoginRequest } from 'libs/dto/src';
 import { PrismaService } from 'src/prisma/prisma.service';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -12,10 +13,6 @@ export class AuthService {
   ) {}
 
   async validateUserById(userId: string) {
-    // Implement your logic to validate the user by ID
-    // For example, you can query the database to find the user by ID
-    // and return the user object if found, or null if not found
-    // Replace this with your actual implementation
     try {
       const user = await this.prismaService.user.findFirstOrThrow({
         where: { id: userId },
@@ -38,9 +35,14 @@ export class AuthService {
         throw new Error('No user');
       }
 
-      if (existingUser.password !== password) {
+      const passwordMatch = await bcrypt.compare(
+        password,
+        existingUser.password,
+      );
+      if (!passwordMatch) {
         throw new Error('Invalid password');
       }
+
       return existingUser.id;
     } catch (e) {
       this.logger.error(e);
@@ -69,8 +71,12 @@ export class AuthService {
 
   async register(body: CreateUserRequest) {
     try {
+      const { password, ...userData } = body;
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
       const newUser = await this.prismaService.user.create({
-        data: { ...body },
+        data: { ...userData, password: hashedPassword },
       });
 
       return newUser;
